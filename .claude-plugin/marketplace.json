@@ -1,0 +1,14 @@
+{
+  "name": "marketplace-of-ideas",
+  "owner": {
+    "name": "sarth6"
+  },
+  "plugins": [
+    {
+      "name": "open-source-contributor",
+      "source": "./plugins/open-source-contributor",
+      "description": "AI-powered tools for contributing to open source projects. Analyzes GitHub issues and produces comprehensive design docs.",
+      "version": "1.0.0"
+    }
+  ]
+}

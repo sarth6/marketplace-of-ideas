@@ -2,36 +2,55 @@
 
 A curated collection of Claude Code plugins for developers who want to get things done.
 
+## Installation
+
+Add this marketplace to Claude Code:
+
+```bash
+/plugin marketplace add sarth6/marketplace-of-ideas
+```
+
+Then install any plugin from it:
+
+```bash
+/plugin install open-source-contributor@marketplace-of-ideas
+```
+
 ## Available Plugins
 
 ### open-source-contributor
+
 Tools for contributing to open source projects with AI assistance.
 
 **Commands:**
-- `/solve-issue <github-issue-url>` - Analyzes a GitHub issue, explores the codebase, and produces a comprehensive design doc
 
-## Installation
+| Command | Description |
+|---------|-------------|
+| `/solve-issue <url>` | Analyzes a GitHub issue and produces a comprehensive design doc |
+| `/solve-issue <url> --interactive` | Same as above, but pauses at checkpoints for your input |
 
-To install a plugin, add it to your Claude Code settings:
-
+**Example:**
 ```bash
-# Add the open-source-contributor plugin
-claude mcp add marketplace-of-ideas/plugins/open-source-contributor
+/solve-issue https://github.com/pydantic/pydantic-ai/issues/1771
 ```
 
-Or clone this repo and add the local path:
-
-```bash
-git clone https://github.com/your-username/marketplace-of-ideas.git
-# Then in your Claude Code settings, add the plugin path
-```
+This will:
+1. Fetch and analyze the GitHub issue
+2. Deploy explore agents to understand the codebase
+3. Research how other libraries solve similar problems
+4. Write a comprehensive design document
+5. Save it as `design-doc-issue-1771.md` in your current directory
 
 ## Contributing
 
 Want to add a plugin? Open a PR! Each plugin should:
-1. Have a clear purpose
-2. Include comprehensive documentation
-3. Follow Claude Code plugin conventions
+
+1. Live in `plugins/<plugin-name>/`
+2. Have a `.claude-plugin/plugin.json` manifest
+3. Include commands in a `commands/` directory
+4. Follow Claude Code plugin conventions
+
+Then add your plugin to `.claude-plugin/marketplace.json` at the repo root.
 
 ## License
 
