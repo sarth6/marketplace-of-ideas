@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b6b;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="200" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Decorative elements -->
+  <circle cx="700" cy="40" r="60" fill="#e94560" opacity="0.1"/>
+  <circle cx="100" cy="160" r="80" fill="#ff6b6b" opacity="0.08"/>
+
+  <!-- Lightbulb icon -->
+  <g transform="translate(60, 60)" filter="url(#glow)">
+    <path d="M40 0C17.9 0 0 17.9 0 40c0 15.5 8.8 28.9 21.7 35.5V90c0 5.5 4.5 10 10 10h16.6c5.5 0 10-4.5 10-10V75.5C71.2 68.9 80 55.5 80 40 80 17.9 62.1 0 40 0z" fill="url(#accentGrad)"/>
+    <rect x="25" y="95" width="30" height="8" rx="4" fill="#ffd93d"/>
+    <rect x="28" y="107" width="24" height="6" rx="3" fill="#ffd93d"/>
+  </g>
+
+  <!-- Main title -->
+  <text x="170" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#ffffff">
+    Marketplace of Ideas
+  </text>
+
+  <!-- Subtitle -->
+  <text x="170" y="130" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#a0a0a0">
+    Claude Code plugins for developers who ship
+  </text>
+
+  <!-- Badge -->
+  <rect x="170" y="145" width="140" height="28" rx="14" fill="url(#accentGrad)" opacity="0.9"/>
+  <text x="240" y="164" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#ffffff" text-anchor="middle">
+    Open Source
+  </text>
+</svg>
