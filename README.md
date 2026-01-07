@@ -1,4 +1,4 @@
-<!-- BANNER_IMAGE_PLACEHOLDER -->
+![Marketplace of Ideas](https://github.com/user-attachments/assets/daa24d38-0ddc-4b7b-b9c3-3df51a8d1560)
 
 # Marketplace of Ideas 💡
 
