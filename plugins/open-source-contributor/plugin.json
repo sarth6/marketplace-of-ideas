@@ -1,0 +1,8 @@
+{
+  "$schema": "https://claude.ai/code/plugin-schema.json",
+  "name": "open-source-contributor",
+  "version": "1.0.0",
+  "description": "AI-powered tools for contributing to open source projects. Analyzes issues, explores codebases, and produces comprehensive design docs.",
+  "author": "marketplace-of-ideas",
+  "commands": "${CLAUDE_PLUGIN_ROOT}/commands"
+}

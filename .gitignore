@@ -1,0 +1,17 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local plugin development
+*.local.md
+.claude/
+
+# Generated design docs (users generate these in their own repos)
+design-doc-*.md
