@@ -204,6 +204,142 @@ Then call the **EnterPlanMode** tool to allow the user to review and approve the
 
 ---
 
+## Phase 6: Extract & Store Lessons 📚
+
+After addressing review comments (when exiting plan mode or after implementation), extract generalizable insights that can help avoid similar feedback in the future.
+
+### Step 6.1: Identify Lesson Candidates
+
+Analyze each review comment for extractable lessons. Look for these **extraction signals**:
+
+**Strong signals (high confidence):**
+- Prescriptive language: "always", "never", "prefer", "should", "convention", "standard"
+- Project standard references: "per our style guide", "we typically", "in this codebase"
+- Pattern explanations: Comments that explain the "why" not just the "what"
+- Repeated feedback: Same issue flagged across multiple files or comments
+
+**Medium signals:**
+- Clear maintainer preferences: "I'd prefer", "it's cleaner to"
+- Best practice references: "idiomatically", "the Go way", "Pythonic"
+
+**Skip these (not generalizable):**
+- Typo corrections (one-off mistakes)
+- Bug-specific fixes (unique to this code)
+- Clarification questions without guidance
+- Context-specific suggestions tied to unique business logic
+
+### Step 6.2: Determine Storage Location
+
+Use the repository's origin URL to create a consistent identifier across worktrees:
+
+```bash
+# Get repo identifier from origin URL
+REPO_ID=$(git remote get-url origin 2>/dev/null | shasum -a 256 | cut -c1-12)
+
+# Fallback to repo path if no remote configured
+if [ -z "$REPO_ID" ]; then
+  REPO_ID=$(git rev-parse --show-toplevel | shasum -a 256 | cut -c1-12)
+fi
+
+LESSONS_DIR="$HOME/.claude/projects/$REPO_ID"
+mkdir -p "$LESSONS_DIR"
+```
+
+### Step 6.3: Check for Duplicates
+
+Before adding a lesson, read the existing lessons file and check if a similar lesson already exists:
+
+```bash
+LESSONS_FILE="$LESSONS_DIR/review-lessons.md"
+if [ -f "$LESSONS_FILE" ]; then
+  # Read existing lessons to avoid duplicates
+  cat "$LESSONS_FILE"
+fi
+```
+
+If a similar lesson exists:
+- If the new instance reinforces it, increment the **Occurrences** count
+- If it adds nuance, update the lesson with the additional context
+- If it's truly the same, skip adding
+
+### Step 6.4: Categorize Lessons
+
+Determine whether each lesson is **shared** (project conventions) or **personal** (individual preferences):
+
+**Shared lessons** (`review-lessons.md`):
+- Explicit project conventions or style guide rules
+- Feedback from maintainers about project patterns
+- Lessons with 3+ occurrences
+- Security or performance requirements specific to the project
+
+**Personal lessons** (`review-lessons.local.md`):
+- Single-instance feedback that might be personal preference
+- Style suggestions without clear project mandate
+- Lessons you want to remember but aren't sure are universal
+
+### Step 6.5: Format and Append Lessons
+
+For each new lesson, format it as:
+
+```markdown
+### [Concise title describing the lesson]
+- **Confidence:** [high|medium|low]
+- **Source:** PR #[number], @[reviewer], [YYYY-MM-DD]
+- **Category:** [code-style|architecture|testing|documentation|performance|security|conventions]
+- **Tags:** [comma-separated relevant tags]
+- **Occurrences:** 1
+
+[Clear description of the lesson - what to do and why]
+
+[Optional: code example showing before/after or correct pattern]
+
+---
+```
+
+Append to the appropriate file:
+```bash
+# Append to shared or local lessons file
+echo "$LESSON_CONTENT" >> "$LESSONS_DIR/review-lessons.md"
+# OR
+echo "$LESSON_CONTENT" >> "$LESSONS_DIR/review-lessons.local.md"
+```
+
+### Step 6.6: Update Repository Metadata
+
+Create or update `repo-info.json` to track the repository:
+
+```bash
+cat > "$LESSONS_DIR/repo-info.json" << EOF
+{
+  "origin_url": "$(git remote get-url origin 2>/dev/null)",
+  "repo_name": "$(basename $(git rev-parse --show-toplevel))",
+  "last_accessed": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "lessons_count": $(grep -c "^### " "$LESSONS_DIR/review-lessons.md" 2>/dev/null || echo 0)
+}
+EOF
+```
+
+### Step 6.7: Report to User
+
+After extracting lessons, report a summary:
+
+```markdown
+## 📚 Lessons Learned
+
+**Extracted [N] new lessons from this review:**
+
+| Lesson | Category | Confidence |
+|--------|----------|------------|
+| [title] | [category] | [confidence] |
+
+**Storage location:** `~/.claude/projects/[repo-hash]/review-lessons.md`
+
+💡 Use `/review-lessons list` to view all lessons for this project.
+💡 Use `/review-lessons search <query>` to find specific lessons.
+```
+
+---
+
 ## Error Handling
 
 - **No PR found for current branch**: If `gh pr view` fails because there's no PR, inform the user and ask them to provide a PR URL or create a PR first.
@@ -246,4 +382,8 @@ Throughout execution, provide clear progress updates:
    ✓ Created implementation plan
 
 🎯 Phase 5: Entering plan mode...
+
+📚 Phase 6: Extracting lessons learned...
+   ✓ Found [N] lesson candidates
+   ✓ Saved to ~/.claude/projects/[repo-hash]/review-lessons.md
 ```
