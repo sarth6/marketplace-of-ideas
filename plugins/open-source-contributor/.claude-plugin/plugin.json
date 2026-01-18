@@ -1,9 +1,10 @@
 {
-  "$schema": "https://claude.ai/code/plugin-schema.json",
   "name": "open-source-contributor",
   "version": "1.0.1",
   "description": "AI-powered tools for contributing to open source projects. Analyzes issues, explores codebases, produces comprehensive design docs, and learns from PR review feedback.",
-  "author": "sarth6",
-  "commands": "${CLAUDE_PLUGIN_ROOT}/commands",
-  "skills": "${CLAUDE_PLUGIN_ROOT}/skills"
+  "author": {
+    "name": "sarth6"
+  },
+  "commands": "./commands",
+  "skills": "./skills"
 }
